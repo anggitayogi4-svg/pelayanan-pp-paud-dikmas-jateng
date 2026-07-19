@@ -259,12 +259,14 @@ if (isset($_GET['hapus'])) {
                     <?php
                     $no = 1;
                     $ambil_data = mysqli_query($koneksi, "SELECT * FROM tbl_pengaduan ORDER BY id DESC");
-                    
+
+                    // perulangan baca data satu per satu sampai baris habis
                     if (mysqli_num_rows($ambil_data) == 0) {
                         echo "<tr><td colspan='8' class='text-center text-muted' style='padding: 30px;'>Belum ada laporan masyarakat yang masuk.</td></tr>";
                     } else {
                         while ($row = mysqli_fetch_array($ambil_data)) {
                             $tanggal = (!empty($row['tanggal_kirim'])) ? date('d-m-Y H:i', strtotime($row['tanggal_kirim'])) : date('d-m-Y H:i');
+                            //... tampilkan tiap kolom (nama, email, laporan, dst)...
                     ?>
                     <tr>
                         <td class="text-center" style="color: #000000 !important; font-weight: bold;"><?= $no++; ?></td>
@@ -282,9 +284,13 @@ if (isset($_GET['hapus'])) {
                         </td>
                         
                         <td class="text-center">
-                            <?php if ($row['status'] == 'Belum Diproses'): ?>
+                            <?php 
+                            // percabangan: ubah tampilan badge sesuai status
+                            if ($row['status'] == 'Belum Diproses'): ?>
                                 <span class="status-badge badge-warning">Belum Diproses</span>
+                                // tampilkan badge kuning
                             <?php else: ?>
+                                
                                 <span class="status-badge badge-success">Selesai</span>
                             <?php endif; ?>
                         </td>
