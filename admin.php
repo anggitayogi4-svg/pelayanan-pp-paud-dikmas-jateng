@@ -18,11 +18,11 @@ if (!$koneksi) {
     die("Koneksi ke database gagal: " . mysqli_connect_error());
 }
   function tampilkanBadgeStatus ($status) {
-                                    if ($status == 'Belum Diproses')
-                                    return '<span class ="status-badge badge-warning"> Belum Diproses</span>';
-                            } else { 
-                                return '<span class ="status-badge badge-success"> Selesai</span>';
-                            }
+     if ($status == 'Belum Diproses')
+         return '<span class ="status-badge badge-warning"> Belum Diproses</span>';
+  } else { 
+         return '<span class ="status-badge badge-success"> Selesai</span>';
+ }
 
 // 3. Fitur Hapus Data
 if (isset($_GET['hapus'])) {
@@ -292,9 +292,7 @@ if (isset($_GET['hapus'])) {
                         
                         <td class="text-center">
                             <?php echo tampilkanBadgeStatus($row ['status']); ?>
-                                
-                               
-                        </td>
+                       </td>
                         
                         <td class="text-center">
                             <a href="admin.php?hapus=<?= $row['id']; ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus laporan ini?');" class="btn-table btn-table-delete">Hapus</a>
