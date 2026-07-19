@@ -17,6 +17,12 @@ $koneksi = mysqli_connect($host, $username, $password, $database);
 if (!$koneksi) {
     die("Koneksi ke database gagal: " . mysqli_connect_error());
 }
+  function tampilkanBadgeStatus ($status) {
+                                    if ($status == 'Belum Diproses')
+                                    return '<span class ="status-badge badge-warning"> Belum Diproses</span>';
+                            } else { 
+                                return '<span class ="status-badge badge-success"> Selesai</span>';
+                            }
 
 // 3. Fitur Hapus Data
 if (isset($_GET['hapus'])) {
@@ -37,7 +43,8 @@ if (isset($_GET['hapus'])) {
         echo "<script>alert('Gagal menghapus data.'); window.location.href='admin.php';</script>";
         exit;
     }
-}
+
+    
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -142,7 +149,7 @@ if (isset($_GET['hapus'])) {
 
         .modern-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: collapse;                                          
             font-size: 0.95rem;
             text-align: left;
         }
@@ -284,15 +291,9 @@ if (isset($_GET['hapus'])) {
                         </td>
                         
                         <td class="text-center">
-                            <?php 
-                            // percabangan: ubah tampilan badge sesuai status
-                            if ($row['status'] == 'Belum Diproses'): ?>
-                                <span class="status-badge badge-warning">Belum Diproses</span>
-                                // tampilkan badge kuning
-                            <?php else: ?>
+                            <?php echo tampilkanBadgeStatus($row ['status']); ?>
                                 
-                                <span class="status-badge badge-success">Selesai</span>
-                            <?php endif; ?>
+                               
                         </td>
                         
                         <td class="text-center">
