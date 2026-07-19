@@ -1,3 +1,16 @@
+<?php
+// ==========================================
+// ELEMEN 3.4: ARRAY DIMENSI, TIPE, PANJANG & PENGURUTAN
+// ==========================================
+// 1. Array satu dimensi berisi kategori laporan (tipe data: array of string)
+$daftar_kategori = array("Kurikulum", "Pelayanan", "Lainnya", "Sarana Prasarana");
+
+// 2. Menghitung panjang array dengan fungsi count()
+$jumlah_kategori = count($daftar_kategori);
+
+// 3. Pengurutan array secara alfabetis (A-Z) dengan fungsi sort()
+sort($daftar_kategori);
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -194,14 +207,17 @@
                     <input type="email" id="email" name="email" placeholder="nama@email.com" required>
                 </div>
 
+                <!-- BAGIAN YANG DIPERBAIKI MENGGUNAKAN ARRAY & FOREACH -->
                 <div class="form-group">
                     <label for="kategori">Kategori Laporan</label>
                     <select id="kategori" name="kategori" required>
-                        <option value="" disabled selected>-- Pilih Kategori --</option>
-                        <option value="Pelayanan">Pelayanan</option>
-                        <option value="Sarana Prasarana">Sarana & Prasarana</option>
-                        <option value="Kurikulum">Kurikulum / Akademik</option>
-                        <option value="Lainnya">Lainnya</option>
+                        <option value="" disabled selected>-- Pilih Kategori (Total: <?php echo $jumlah_kategori; ?>) --</option>
+                        <?php 
+                        // Perulangan foreach untuk mengeluarkan data dari dalam array buatan sendiri
+                        foreach ($daftar_kategori as $kategori) {
+                            echo "<option value='" . htmlspecialchars($kategori) . "'>" . htmlspecialchars($kategori) . "</option>";
+                        }
+                        ?>
                     </select>
                 </div>
 

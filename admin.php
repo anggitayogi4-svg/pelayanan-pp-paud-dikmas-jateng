@@ -7,9 +7,9 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 }
 
 // 2. Pengaturan Koneksi ke Database
-$host     = "localhost";
+$host = "localhost";
 $username = "root";
-$password = ""; 
+$password = "";
 $database = "db_paud_dikmas";
 
 $koneksi = mysqli_connect($host, $username, $password, $database);
@@ -18,10 +18,21 @@ if (!$koneksi) {
     die("Koneksi ke database gagal: " . mysqli_connect_error());
 }
 
+function tampilkanBadgeStatus($status)
+{
+    if ($status == 'Belum Diproses') {
+        return '<span class="status-badge badge-warning">Belum Diproses</span>';
+    } else {
+        return '<span class="status-badge badge-success">Selesai</span>';
+    }
+}
+
 // 3. Fitur Hapus Data
+// PENTING: blok ini HARUS ditutup ( } ) sebelum bagian HTML di bawah,
+// supaya bagian HTML dashboard tetap tampil saat tidak ada parameter ?hapus=
 if (isset($_GET['hapus'])) {
     $id_hapus = mysqli_real_escape_string($koneksi, $_GET['hapus']);
-    
+
     // Ambil nama file lampiran lama agar file fisiknya di folder 'uploads' juga terhapus bersih
     $cek_file = mysqli_query($koneksi, "SELECT lampiran FROM tbl_pengaduan WHERE id = '$id_hapus'");
     $data_file = mysqli_fetch_array($cek_file);
@@ -37,10 +48,11 @@ if (isset($_GET['hapus'])) {
         echo "<script>alert('Gagal menghapus data.'); window.location.href='admin.php';</script>";
         exit;
     }
-}
+} // <- Tutup blok if(isset($_GET['hapus'])) DI SINI, bukan di bawah setelah HTML
 ?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,7 +77,7 @@ if (isset($_GET['hapus'])) {
             background-color: #2b78e4;
             color: #ffffff;
             padding: 15px 0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
 
         .header-container {
@@ -135,7 +147,7 @@ if (isset($_GET['hapus'])) {
         .card-table-wrapper {
             background-color: #ffffff;
             border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             padding: 25px;
             overflow-x: auto;
         }
@@ -222,10 +234,17 @@ if (isset($_GET['hapus'])) {
             border: 1px solid #22c55e;
         }
 
-        .text-center { text-align: center !important; }
-        .text-muted { color: #64748b; font-style: italic; }
+        .text-center {
+            text-align: center !important;
+        }
+
+        .text-muted {
+            color: #64748b;
+            font-style: italic;
+        }
     </style>
 </head>
+
 <body>
 
     <header class="main-header">
@@ -233,7 +252,8 @@ if (isset($_GET['hapus'])) {
             <h1 class="logo-text">Halaman Admin - PAUD DIKMAS</h1>
             <div class="header-nav">
                 <a href="index.php" class="btn-nav">Lihat Form Depan</a>
-                <a href="logout.php" class="btn-nav btn-logout" onclick="return confirm('Apakah Anda yakin ingin keluar?');">Logout</a>
+                <a href="logout.php" class="btn-nav btn-logout"
+                    onclick="return confirm('Apakah Anda yakin ingin keluar?');">Logout</a>
             </div>
         </div>
     </header>
@@ -259,41 +279,61 @@ if (isset($_GET['hapus'])) {
                     <?php
                     $no = 1;
                     $ambil_data = mysqli_query($koneksi, "SELECT * FROM tbl_pengaduan ORDER BY id DESC");
-                    
+
+                    // perulangan baca data satu per satu sampai baris habis
                     if (mysqli_num_rows($ambil_data) == 0) {
                         echo "<tr><td colspan='8' class='text-center text-muted' style='padding: 30px;'>Belum ada laporan masyarakat yang masuk.</td></tr>";
                     } else {
                         while ($row = mysqli_fetch_array($ambil_data)) {
                             $tanggal = (!empty($row['tanggal_kirim'])) ? date('d-m-Y H:i', strtotime($row['tanggal_kirim'])) : date('d-m-Y H:i');
+                            //... tampilkan tiap kolom (nama, email, laporan, dst)...
+                            ?>
+                            <tr>
+                                <td class="text-center" style="color: #000000 !important; font-weight: bold;"><?= $no++; ?></td>
+                                <td class="text-center" style="color: #000000 !important; font-weight: 500;"><?= $tanggal; ?>
+                                </td>
+                                <td style="color: #000000 !important; font-weight: bold;"><?= htmlspecialchars($row['nama']); ?>
+                                </td>
+                                <td style="color: #000000 !important; font-weight: 500;"><?= htmlspecialchars($row['email']); ?>
+                                </td>
+                                <td style="color: #000000 !important;"><?= nl2br(htmlspecialchars($row['laporan'])); ?></td>
+
+                                <td class="text-center">
+                                    <?php if (!empty($row['lampiran'])): ?>
+                                        <a href="uploads/<?= $row['lampiran']; ?>" target="_blank"
+                                            class="btn-table btn-table-view">Lihat Berkas</a>
+                                    <?php else: ?>
+                                        <span class="text-muted" style="font-size: 0.85rem;">Tidak Ada</span>
+                                    <?php endif; ?>
+                                </td>
+
+                                <td class="text-center">
+                                    <?php echo tampilkanBadgeStatus($row['status']); ?>
+                                    <?php if ($row['status'] == 'Belum Diproses'): ?>
+                                        <br>
+                                        <a href="ubah_status.php?id=<?= $row['id']; ?>&status=Selesai"
+                                            class="btn-table btn-table-view" style="margin-top:5px; display:inline-block;"
+                                            onclick="return confirm('Tandai laporan ini sebagai Selesai?');">
+                                            Tandai Selesai
+                                        </a>
+                                    <?php endif; ?>
+                                </td>
+
+                                <td class="text-center">
+                                    <a href="admin.php?hapus=<?= $row['id']; ?>"
+                                        onclick="return confirm('Apakah Anda yakin ingin menghapus laporan ini?');"
+                                        class="btn-table btn-table-delete">Hapus</a>
+                                </td>
+                            </tr>
+                            <?php
+                        } // Tutup while
+                    } // Tutup else
                     ?>
-                    <tr>
-                        <td class="text-center" style="color: #000000 !important; font-weight: bold;"><?= $no++; ?></td>
-                        <td class="text-center" style="color: #000000 !important; font-weight: 500;"><?= $tanggal; ?></td>
-                        <td style="color: #000000 !important; font-weight: bold;"><?= htmlspecialchars($row['nama']); ?></td>
-                        <td style="color: #000000 !important; font-weight: 500;"><?= htmlspecialchars($row['email']); ?></td>
-                        <td style="color: #000000 !important;"><?= nl2br(htmlspecialchars($row['laporan'])); ?></td>
-                        
-                        <td class="text-center">
-                            <?php if (!empty($row['lampiran'])): ?>
-                                <a href="uploads/<?= $row['lampiran']; ?>" target="_blank" class="btn-table btn-table-view">Lihat Berkas</a>
-                            <?php else: ?>
-                                <span class="text-muted" style="font-size: 0.85rem;">Tidak Ada</span>
-                            <?php endif; ?>
-                        </td>
-                        
-                        <td class="text-center">
-                            <?php if ($row['status'] == 'Belum Diproses'): ?>
-                                <span class="status-badge badge-warning">Belum Diproses</span>
-                            <?php else: ?>
-                                <span class="status-badge badge-success">Selesai</span>
-                            <?php endif; ?>
-                        </td>
-                        
-                        <td class="text-center">
-                            <a href="admin.php?hapus=<?= $row['id']; ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus laporan ini?');" class="btn-table btn-table-delete">Hapus</a>
-                        </td>
-                    </tr>
-                    <?php 
-                        } 
-                    } 
-                    ?>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+</body>
+
+</html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +14,8 @@
         }
 
         .hero-container {
-            max-width: 1100px; /* Diperlebar agar muat teks + gambar */
+            max-width: 1100px;
+            /* Diperlebar agar muat teks + gambar */
             margin: 0 auto;
         }
 
@@ -23,7 +25,8 @@
             align-items: center;
             justify-content: space-between;
             gap: 40px;
-            text-align: left; /* Teks rata kiri agar seimbang dengan gambar di kanan */
+            text-align: left;
+            /* Teks rata kiri agar seimbang dengan gambar di kanan */
         }
 
         .hero-text-content {
@@ -40,9 +43,11 @@
         .img-fluid-transparent {
             max-width: 100%;
             height: auto;
-            max-height: 350px; /* Batasi tinggi maksimal agar tidak terlalu besar */
+            max-height: 350px;
+            /* Batasi tinggi maksimal agar tidak terlalu besar */
             object-fit: contain;
-            filter: drop-shadow(0px 10px 20px rgba(0,0,0,0.15)); /* Memberi efek bayangan halus pada gambar transparan */
+            filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.15));
+            /* Memberi efek bayangan halus pada gambar transparan */
         }
 
         /* Responsif: Jika dibuka di HP, gambar otomatis pindah ke bawah teks */
@@ -51,11 +56,13 @@
                 flex-direction: column;
                 text-align: center;
             }
+
             .img-fluid-transparent {
                 max-height: 250px;
                 margin-top: 20px;
             }
         }
+
         * {
             margin: 0;
             padding: 0;
@@ -76,7 +83,7 @@
             background-color: #2b78e4;
             color: #ffffff;
             padding: 15px 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .header-container {
@@ -137,14 +144,15 @@
         /* Tombol Utama */
         .btn-main-action {
             display: inline-block;
-            background-color: #ffcc00; /* Warna kuning kontras menarik perhatian */
+            background-color: #ffcc00;
+            /* Warna kuning kontras menarik perhatian */
             color: #222222;
             text-decoration: none;
             padding: 15px 35px;
             font-size: 1.1rem;
             font-weight: 700;
             border-radius: 5px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
             transition: transform 0.2s, background-color 0.3s;
         }
 
@@ -178,7 +186,7 @@
             background: #ffffff;
             padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             text-align: center;
             border-top: 4px solid #2b78e4;
         }
@@ -206,6 +214,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <!-- Header Atas -->
@@ -218,15 +227,16 @@
 
     <!-- Bagian Banner Utama (Hero) dengan Layout Kiri-Kanan -->
     <!-- Bagian Banner Utama (Hero) Desain Tengah Elegan -->
-<section class="hero-section">
-    <div class="hero-container">
-        <h2>Sistem Layanan Pengaduan & Aspirasi Masyarakat</h2>
-        <p>Suara Anda penting bagi kami. Laporkan segala kendala, saran, atau aduan terkait pelayanan PAUD dan Pendidikan Masyarakat demi pelayanan yang lebih baik dan transparan.</p>
-        <div style="margin-top: 30px;">
-            <a href="form_pengaduan.php" class="btn-main-action">Buat Laporan Sekarang &rarr;</a>
+    <section class="hero-section">
+        <div class="hero-container">
+            <h2>Sistem Layanan Pengaduan & Aspirasi Masyarakat</h2>
+            <p>Suara Anda penting bagi kami. Laporkan segala kendala, saran, atau aduan terkait pelayanan PAUD dan
+                Pendidikan Masyarakat demi pelayanan yang lebih baik dan transparan.</p>
+            <div style="margin-top: 30px;">
+                <a href="login_pengaduan.php" class="btn-main-action">Buat Laporan Sekarang &rarr;</a>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
     <!-- Bagian Informasi Alur Kerja -->
     <section class="info-section">
@@ -253,4 +263,5 @@
     </footer>
 
 </body>
+
 </html>
